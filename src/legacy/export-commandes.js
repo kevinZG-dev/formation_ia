@@ -16,6 +16,20 @@ function requete(db, sql, params, cb) {
   });
 }
 
+function formaterMontant(montant) {
+  var montantTxt = String(montant);
+  if (montantTxt.indexOf('.') == -1) {
+    montantTxt = montantTxt + ',00';
+  } else {
+    var p = montantTxt.split('.');
+    if (p[1].length == 1) {
+      p[1] = p[1] + '0';
+    }
+    montantTxt = p[0] + ',' + p[1];
+  }
+  return montantTxt;
+}
+
 function exporterCommandes(db, depuis, callback) {
   var csv = 'numero;date;client;ville;nb_lignes;total_ht;total_ttc\n';
   requete(db, 'SELECT * FROM commandes WHERE date >= ? ORDER BY date, id', [depuis], function (err, commandes) {
@@ -54,27 +68,9 @@ function exporterCommandes(db, depuis, callback) {
             continue;
           }
           var ht = Math.round(tot * 100) / 100;
-          var htTxt = String(ht);
-          if (htTxt.indexOf('.') == -1) {
-            htTxt = htTxt + ',00';
-          } else {
-            var p = htTxt.split('.');
-            if (p[1].length == 1) {
-              p[1] = p[1] + '0';
-            }
-            htTxt = p[0] + ',' + p[1];
-          }
+          var htTxt = formaterMontant(ht);
           var ttc = Math.round(tot * (1 + TVA) * 100) / 100;
-          var ttcTxt = String(ttc);
-          if (ttcTxt.indexOf('.') == -1) {
-            ttcTxt = ttcTxt + ',00';
-          } else {
-            var q = ttcTxt.split('.');
-            if (q[1].length == 1) {
-              q[1] = q[1] + '0';
-            }
-            ttcTxt = q[0] + ',' + q[1];
-          }
+          var ttcTxt = formaterMontant(ttc);
           var nom = cl ? cl.nom : 'INCONNU';
           if (nom.indexOf(';') != -1) {
             nom = nom.replace(/;/g, ',');
