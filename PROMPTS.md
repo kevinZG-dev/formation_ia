@@ -56,3 +56,5 @@ Une entrée par demande significative faite à Copilot pendant les TP. Ce journa
 3. **Élevée — données chargées sans filtre** : toutes les lignes et tous les clients sont lus, même si l’export concerne une période donnée ; les lignes des commandes annulées sont aussi parcourues avant leur exclusion. Cela amplifie le travail inutile.
 4. **Moyenne — traitement difficile à suivre** : `exporterCommandes` cumule accès aux données, calculs et formatage dans des callbacks imbriqués, et sa complexité signalée par ESLint est de 19.
 5. **Faible — duplication et conventions vieillissantes** : le formatage HT/TTC est dupliqué et les variables `var` ainsi que les comparaisons `==` nuisent à la cohérence et à la maintenance.
+
+## Mesures après
